@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ff9ae2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #bde812;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 155, 245, 0.1);
+        }
+
+        h1 {
+            color: #bde812;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 2px;
+            margin: 20px auto;
+            background-color: rgb(253, 176, 248);
+            border-radius: 5px;
+            border: 2px solid #96f332;
+            padding: 2px;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: #fc7ce6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: 1px solid #8ffa38;
+        }
+
+        .cell:hover {
+            background-color: #ddd;
+        }
+
+        button {
+            background-color: #e8a9f5;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #a1fa11;
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Tic Tac Toe</h1>
+        <div class="board" id="board"></div>
+        <button onclick="startGame()">Start New Game</button>
+        <div class="message"></div>
+    </div>
+
+    <script>
+        let board = ['', '', '', '', '', '', '', '', ''];
+        let currentPlayer = 'X';
+        let gameInProgress = false;
+        let singlePlayerMode = false;
+
+        const winningCombos = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        const strategicPositions = [4, 0, 2, 6, 8, 1, 3, 5, 7];
+
+        function startGame() {
+            board = ['', '', '', '', '', '', '', '', ''];
+            currentPlayer = 'X';
+            gameInProgress = true;
+            singlePlayerMode = confirm("Shall we begin?");
+
+            const boardDiv = document.getElementById('board');
+            boardDiv.innerHTML = '';
+
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.dataset.index = i;
+                cell.addEventListener('click', () => makeMove(i));
+                boardDiv.appendChild(cell);
+            }
+
+            if (singlePlayerMode && currentPlayer === 'O') {
+                makeAiMove();
+            }
+        }
+
+        function makeMove(index) {
+            if (!gameInProgress || board[index] !== '') return;
+
+            board[index] = currentPlayer;
+            renderBoard();
+
+            if (checkWinner()) {
+                alert(`${currentPlayer} wins!`);
+                gameInProgress = false;
+                return;
+            }
+
+            if (!board.includes('')) {
+                alert("It's a draw!");
+                gameInProgress = false;
+                return;
+            }
+
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+
+            if (singlePlayerMode && currentPlayer === 'O') {
+                makeAiMove();
+            }
+        }
+
+        function makeAiMove() {
+            let aiMove = findBestMove();
+            board[aiMove] = 'O';
+            renderBoard();
+
+            if (checkWinner()) {
+                alert('AI wins!');
+                gameInProgress = false;
+                return;
+            }
+
+            if (!board.includes('')) {
+                alert("It's a draw!");
+                gameInProgress = false;
+                return;
+            }
+
+            currentPlayer = 'X';
+        }
+
+        function findBestMove() {
+            // Check for winning move
+            for (let i = 0; i < 9; i++) {
+                if (board[i] === '') {
+                    board[i] = 'O';
+                    if (checkWinner()) {
+                        board[i] = '';
+                        return i;
+                    }
+                    board[i] = '';
+                }
+            }
+
+            // Check for blocking move
+            for (let i = 0; i < 9; i++) {
+                if (board[i] === '') {
+                    board[i] = 'X';
+                    if (checkWinner()) {
+                        board[i] = '';
+                        return i;
+                    }
+                    board[i] = '';
+                }
+            }
+
+            // Choose a strategic move
+            for (let pos of strategicPositions) {
+                if (board[pos] === '') {
+                    return pos;
+                }
+            }
+
+            // If no strategic move available, choose randomly
+            let availableMoves = board.reduce((acc, cell, index) => {
+                if (cell === '') acc.push(index);
+                return acc;
+            }, []);
+            return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+        }
+
+        function checkWinner() {
+            for (let combo of winningCombos) {
+                if (board[combo[0]] && board[combo[0]] === board[combo[1]] && board[combo[0]] === board[combo[2]]) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function renderBoard() {
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach((cell, index) => {
+                cell.textContent = board[index];
+            });
+        }
+
+        startGame();
+    </script>
+</body>
+
+</html>

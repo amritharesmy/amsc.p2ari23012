@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordle Game</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f75f00;
+            padding-top: 50px;
+        }
+        #wordle-container {
+            background-color: #f0ec0e;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(245, 44, 26, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        #feedback {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        h1 {
+            font-style: italic; 
+            font-weight: bold; 
+            color: #ffcc00; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Wordle Game</h1>
+    <div id="wordle-container">
+        <div class="form-group">
+            <label for="guess-input">Guess a word:</label>
+            <input type="text" class="form-control" id="guess-input" maxlength="5">
+        </div>
+        <button id="submit-btn" class="btn btn-primary">Submit</button>
+        <div id="feedback"></div>
+    </div>
+
+    <script>
+        // Define the secret word
+        const secretWord = "apple";
+
+        // Function to validate guess
+        function validateGuess(guess) {
+            if (!guess.match(/^[a-zA-Z]+$/) || guess.length !== secretWord.length) {
+                return false;
+            }
+            return true;
+        }
+
+        // Function to check guess and provide feedback
+        function checkGuess(guess) {
+            let correctCount = 0;
+            for (let i = 0; i < secretWord.length; i++) {
+                if (secretWord[i] === guess[i]) {
+                    correctCount++;
+                }
+            }
+            return correctCount;
+        }
+
+        // Event listener for submit button
+        document.getElementById("submit-btn").addEventListener("click", function() {
+            const guess = document.getElementById("guess-input").value.toLowerCase();
+
+            if (!validateGuess(guess)) {
+                alert("Invalid guess. Please enter a word with exactly 5 letters.");
+                return;
+            }
+
+            const correctCount = checkGuess(guess);
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = `${guess.toUpperCase()} - ${correctCount} correct letters`;
+
+            if (correctCount === secretWord.length) {
+                feedback.textContent += ". Congratulations! You guessed the word!";
+            }
+
+            document.getElementById("guess-input").value = "";
+        });
+    </script>
+</body>
+</html>
+

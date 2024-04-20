@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Album</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        /* CSS for styling the photo album */
+        body {
+            background-color: #d0d4d9;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .photo-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .photo {
+            margin: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        .photo:hover {
+            transform: scale(1.05);
+        }
+        .photo img {
+            width:300px; /* Adjust the width to your desired size */
+            height:300px; /* Adjust the height to your desired size */
+            object-fit: cover; /* Maintain aspect ratio while filling the box */
+        }
+        .btn-group {
+            margin-top: 20px;
+        }
+        .btn-group button {
+            margin-right: 10px;
+        }
+        #imageCanvas {
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
+        }
+        #result {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; color: rgb(0, 0, 1);">FLORAL CHRONICLE</h1>
+    <div class="photo-container">
+        <div class="photo">
+            <img src="assets/annualflwr copy.jpeg" alt="Image 1">
+        </div>
+        <div class="photo">
+            <img src="assets/mosanda.jpeg" alt="Image 2">
+        </div>
+        <div class="photo">
+            <img src="assets/rose.jpeg" alt="Image 3">
+        </div>
+        <div class="photo">
+            <img src="assets/sunflower.jpeg" alt="Image 4">
+        </div>
+        <div class="photo">
+            <img src="assets/tulip.jpeg" alt="Image 5">
+        </div>
+        <div class="photo">
+            <img src="assets/petunia.jpeg" alt="Image 6">
+        </div>
+        <div class="photo">
+            <img src="assets/daisy.jpeg"alt="Image 7">
+        </div>
+        <div class="photo">
+            <img src="assets/lilly.jpeg"alt="Image 8">
+        </div>
+        <div class="photo">
+            <img src="assets/pink.jpeg" alt="Image 9">
+        </div>
+        <div class="photo">
+            <img src="assets/arali.jpeg" alt="Image 10">
+        </div>
+        <div class="photo">
+            <img src="assets/annualflwr.jpeg" alt="Image 11">
+        </div>
+        <div class="photo">
+            <img src="assets/springtimeflwr.jpeg" alt="Image 12">
+        </div>
+        <div class="photo">
+            <img src="assets/greenflwr.jpeg" alt="Image 13">
+        </div>
+        <div class="photo">
+            <img src="assets/hibiscus.jpeg" alt="Image 14">
+        </div>
+        <div class="photo">
+            <img src="assets/queensland.jpeg" alt="Image 15">
+        </div>
+        <div class="photo">
+            <img src="assets/multirose.jpeg" alt="Image 16">
+        </div>
+    </div>
+</div>
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <canvas id="imageCanvas"></canvas>
+                <div class="btn-group" role="group">
+                    <button onclick="checkImageColor()" class="btn btn-primary">Check Image Color</button>
+                    <button onclick="makeImageColor('red')" class="btn btn-danger">Make Reddish</button>
+                    <button onclick="makeImageColor('green')" class="btn btn-success">Make Greenish</button>
+                    <button onclick="makeImageColor('blue')" class="btn btn-primary">Make Blueish</button>
+                    <button onclick="duplicateImage()" class="btn btn-secondary">Duplicate Image</button>
+                    <button onclick="increaseBrightness()" class="btn btn-warning">Increase Brightness</button>
+                    <button onclick="reduceResolution()" class="btn btn-info">Reduce Resolution</button>
+                    <button onclick="rgbToGray()" class="btn btn-primary">Convert to Grayscale</button>
+                    <button onclick="reduceResolution()" class="btn btn-info">CreateAvatar</button>
+                    <!-- Add buttons for other operations -->
+                </div>
+                <p id="result" class="mt-2"></p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <button onclick="prevImage()" class="btn btn-secondary">Previous</button>
+                <button onclick="nextImage()" class="btn btn-secondary">Next</button>
+            </div>
+        </div>
+    </div>
+    <script src="imageProcessing.js"></script>
+</body> 
+</html>
